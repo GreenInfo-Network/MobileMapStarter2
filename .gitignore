@@ -1,0 +1,17 @@
+# Mac, why?
+.DS_Store
+
+# yarn takes care of our build-tool deps, not version control
+node_modules/
+
+# "cordova prepare" will check for missing platforms and plugins and install them
+# so we don't need their files around, just the references
+platforms/*/
+plugins/*/
+
+# the compiled CSS/JS bundle files
+# they are required for the app to run, but not to be in version control as they will be rebuilt
+www/bundle.css
+www/bundle.css.map
+www/bundle.js
+www/bundle.js.map

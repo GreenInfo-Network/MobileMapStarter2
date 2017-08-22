@@ -1,0 +1,17 @@
+/* top and bottom nav bars */
+.navbar {
+    /* navbar color and font */
+    border-color: #ccc;
+    background: white;
+    border-width: 1px;
+    border-style: solid;
+    color: black;
+
+    /* size + color of corner-floating buttons */
+    div.btn-group {
+        a, i {
+        color: black;
+            font-size: 20px;
+        }
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "org.greeninfo.mobilemapstarter2"
+        },
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "org.greeninfo.mobilemapstarter2"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "org.greeninfo.mobilemapstarter2"
+        }
+    },
+    "dependent_plugins": {}
+}

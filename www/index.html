@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Mobile Map Starter 2</title>
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0" />
+
+        <!-- cordova placeholder; yeah it doesn't exist -->
+        <script src="cordova.js"></script>
+
+        <!-- AngularJS and ui-router -->
+        <script src="node_modules/angular/angular.js"></script>
+        <script src="node_modules/angular-ui-router/release/angular-ui-router.js"></script>
+
+        <!-- UI library -->
+        <link rel="stylesheet" href="node_modules/mobile-angular-ui/dist/css/mobile-angular-ui-base.css" />
+        <script src="node_modules/mobile-angular-ui/dist/js/mobile-angular-ui.js"></script>
+        <script src="node_modules/mobile-angular-ui/dist/js/mobile-angular-ui.gestures.js"></script>
+
+        <!-- our own awesomesauce -->
+        <script src="bundle.js"></script>
+        <link rel="stylesheet" type="text/css" href="bundle.css" />
+    </head>
+    <body ng-app="mobileApp" ng-controller="appController" ui-prevent-touchmove-defaults>
+        <!-- sidebar -->
+        <span ng-include="'html/sidebar.html'"></span>
+
+        <div class="app" ui-swipe-right="Ui.turnOn('uiSidebarLeft')" ui-swipe-left="Ui.turnOff('uiSidebarLeft')">
+            <span ng-include="'html/navbar-top.html'"></span>
+            <span ng-include="'html/navbar-bottom.html'"></span>
+
+            <!-- div.app main app body -->
+            <div class="app-body">
+                <div class="app-content" ui-view></div>
+            </div>
+        </div><!-- div.app -->
+
+        <!-- Modals and Overlays will go here -->
+        <div ui-yield-to="modals"></div>
+    </body>
+</html>
