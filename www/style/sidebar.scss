@@ -1,0 +1,22 @@
+/* the sidebar */
+.sidebar {
+    /* you can mess with this, but you likely should not */
+    width: 300px;
+
+    background: $sidebar-background-color;
+
+    h1 {
+        color: $sidebar-title-color;
+    }
+
+    .list-group-item {
+        background: $sidebar-item-background-color;
+        color: $sidebar-item-text-color;
+        border-color: $sidebar-border-color;
+    }
+    .list-group-item.active {
+        background: $sidebar-item-background-color-active;
+        border-color: $sidebar-item-background-color-active;
+        color: $sidebar-item-text-color-active;
+    }
+}

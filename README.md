@@ -24,7 +24,7 @@ You will also want to edit `config.xml` and `package.json` to reflect you app's 
 
 This app uses webpack to compile ES2015 code into JavaScript, and to compile SASS into CSS. The output files are *bundle.css* and *bundle.js* but you should instead make your changes to the `index.*` entry points. See the Quick Start for an overview of the files.
 
-The basic HTML/JS framework is *mobile-angular-ui* This is basically AngularJS and an optimzied build of Bootstrap 3.
+The basic HTML/JS framework is *mobile-angular-ui* This is basically AngularJS and an optimzied build of Bootstrap 3. Read more: http://mobileangularui.com/docs/
 
 For internal hyperlinks, *angular-ui-router* is used. This means that in your HTML should use `ui-sref` tags and the `$stateProvider` To navigate to a page programatically, use `$state.go()`
 

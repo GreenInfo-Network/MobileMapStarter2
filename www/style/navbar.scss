@@ -1,17 +1,33 @@
 /* top and bottom nav bars */
 .navbar {
     /* navbar color and font */
-    border-color: #ccc;
-    background: white;
+    border-color: $navbar-border-color;
+    background: $navbar-background-color;
     border-width: 1px;
     border-style: solid;
-    color: black;
+    color: $navbar-text-color;
 
     /* size + color of corner-floating buttons */
     div.btn-group {
         a, i {
-        color: black;
+            color: $navbar-text-color;
             font-size: 20px;
         }
     }
+}
+
+.app-content {
+    /* the main app content panel, between the top and bottom navbars */
+    background-color: $appcontent-background-color;
+    color: $appcontent-text-color;
+
+    a {
+        color: $appcontent-link-color;
+        font-weight: bold;
+    }
+}
+
+.app {
+    /* at least on bottom navbar, the .app background shines through the 1px spacing making for a thick border; gve it the app-content BG color */
+    background: $navbar-background-color;
 }

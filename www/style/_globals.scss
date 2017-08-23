@@ -1,0 +1,25 @@
+/*
+GLOBALS for styling various colors that you'll probably want to customize
+Of course, there's nothing stopping you from editing the other .scss files too, but for convenience there are robably the first items you'll customize.
+*/
+
+/* NAVBAR */
+$navbar-background-color: white;
+$navbar-text-color: black;
+$navbar-border-color: #ccc;
+
+/* MAIN CONTENT PANEL */
+$appcontent-background-color: #FAFAFA;
+$appcontent-text-color: black;
+$appcontent-link-color: blue;
+
+/* SIDEBAR */
+$sidebar-background-color: black;
+$sidebar-title-color: white;
+$sidebar-border-color: green;
+
+$sidebar-item-background-color: white;
+$sidebar-item-text-color: black;
+
+$sidebar-item-background-color-active: black;
+$sidebar-item-text-color-active: white;
