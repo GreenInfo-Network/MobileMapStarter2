@@ -1,14 +1,23 @@
-angular.module('mobileApp', [
-    'ui.router',
-    'mobile-angular-ui',
-    'mobile-angular-ui.gestures',
-])
-.config(function($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise("/welcome");
-    $stateProvider
-    .state('welcome', { url: "/welcome", templateUrl: "html/welcome.html" })
-    .state('map',     { url: "/map",     templateUrl: "html/map.html" })
-    .state('about',   { url: "/about",   templateUrl: "html/about.html" });
-})
-.controller('appController', function($scope) {
-});
+export const APP_CONTROLLER = function ($scope) {
+    //
+    // initialization: a Leaflet Map in $scope.map
+    //
+/*
+    {
+alert('hey 1' + L.map);
+
+        $scope.map = L.map('map-map', {
+        });
+alert('hey 2' + L);
+
+
+        $scope.map.setView([ 0, 0 ], 1 );
+alert('hey 3' + L);
+
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        }).addTo($scope.map);
+
+    }
+*/
+};

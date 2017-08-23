@@ -18,6 +18,16 @@ require('./html/sidebar.html');
 require('./html/welcome.html');
 
 //
-// include our own controller code for our app, also into bundle.js
+// now our real app
 //
-require('./code/controller.js');
+
+import { APP_CONTROLLER } from './code/controller';
+import { UI_ROUTING } from './code/routing';
+
+angular.module('mobileApp', [
+    'ui.router',
+    'mobile-angular-ui',
+    'mobile-angular-ui.gestures',
+])
+.config(UI_ROUTING)
+.controller('appController', APP_CONTROLLER);

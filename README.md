@@ -40,9 +40,8 @@ An overview of the files:
 * `www/index.js` -- The entry point for webpack
   * This should act as an entry point to `require()` your SCSS, HTML, etc.
   * Basic entry points would be controller.js, index.scss, etc. but if you use watch mode you may also want to add the templates under `html/` so the watch will recompile when those change.  
-* `code/controller.js` -- The starting point for this application's code (your code!).
-  * Write your own code here: Angualar module, routes, controller, directives, etc.
-  * This will be treated as ES2015 code and run through webpack, so you may require and import as usual.
+* `code/*.js` -- Additional JavaScript code to support `index.js`
+  * Starting convention includes a `routing.js` and `controller.js` which are imported into `index.js` to bootstrap the application. You may expand upon this as you like.
 * `www/index.html` -- The skeleton of the app's HTML rendering.
   * This includes the various script and link tags for loading CSS and JS libraries, and provides the basic layout.
   * For the most part, this is a skeleton and you'll want to work within the `html/*.html` templates for specific panels/pages within your app.
