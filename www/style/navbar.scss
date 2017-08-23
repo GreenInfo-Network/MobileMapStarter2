@@ -20,7 +20,18 @@
     }
 }
 
+/* if you use a bottom-nav to act similar to tabs, you likely want the icons to be bigger than the ones in the top navbar */
+.navbar.navbar-absolute-bottom {
+    div.btn-group {
+        a, i {
+            font-size: 30px;
+            line-height: 20px;
+            color: $navbar-bottom-buttons-color;
+        }
+    }
+}
+
+/* at least on bottom navbar, the .app background shines through the 1px spacing making for a thick border; gve it the app-content BG color */
 .app {
-    /* at least on bottom navbar, the .app background shines through the 1px spacing making for a thick border; gve it the app-content BG color */
     background: $navbar-background-color;
 }
