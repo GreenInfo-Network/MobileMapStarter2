@@ -1,5 +1,5 @@
-/* top and bottom nav bars */
-.navbar {
+/* top nav bar, a title and a sidebar-toggle, maybe a right-corner link */
+.navbar.navbar-absolute-top {
     /* navbar color and font */
     border-color: $navbar-border-color;
     background: $navbar-background-color;
@@ -20,18 +20,32 @@
     }
 }
 
-/* if you use a bottom-nav to act similar to tabs, you likely want the icons to be bigger than the ones in the top navbar */
+/* bottom nav bar; when present, usually 3 or 4 big graphical buttons with text labels */
 .navbar.navbar-absolute-bottom {
+    border-color: $navbar-border-color;
+    background: $navbar-background-color;
+    border-width: 1px;
+    border-style: solid;
+    color: $navbar-text-color;
+    font-family: $navbar-font;
+
+    .navbar-brand {
+        padding: 5px 15px;
+    }
+
     div.btn-group {
-        a, i {
-            font-size: 30px;
-            line-height: 20px;
+        a {
+            font-size: 15px;
+            color: $navbar-bottom-buttons-color;
+        }
+        i {
+            font-size: 22px;
             color: $navbar-bottom-buttons-color;
         }
     }
 }
 
-/* at least on bottom navbar, the .app background shines through the 1px spacing making for a thick border; gve it the app-content BG color */
+/* at least when using a bottom navbar, the .app background shines through the 1px spacing making for a thick border; gve it the app-content BG color */
 .app {
     background: $navbar-background-color;
 }
