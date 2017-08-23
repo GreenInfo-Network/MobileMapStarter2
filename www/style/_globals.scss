@@ -8,7 +8,7 @@ but for convenience there are robably the first items you'll customize.
 $navbar-background-color: white;
 $navbar-text-color: black;
 $navbar-border-color: #ccc;
-$navbar-font: 'Courier';
+$navbar-font: 'Arial';
 
 /* MAIN CONTENT PANEL */
 $appcontent-background-color: #FAFAFA;
@@ -21,16 +21,16 @@ $maincontent-heading-font: 'Helvetica';
 $maincontent-heading-color: black;
 
 /* SIDEBAR */
-$sidebar-background-color: black;
+$sidebar-background-color: #666;
 
 $sidebar-title-color: white;
 $sidebar-title-font: 'Helvetica';
 
-$sidebar-border-color: green;
+$sidebar-border-color: #ccc;
 $sidebar-item-font: 'Helvetica';
 
 $sidebar-item-background-color: white;
-$sidebar-item-text-color: black;
+$sidebar-item-text-color: #333;
 
-$sidebar-item-background-color-active: black;
+$sidebar-item-background-color-active: #333;
 $sidebar-item-text-color-active: white;
