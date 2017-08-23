@@ -22,12 +22,9 @@ require('./html/welcome.html');
 //
 
 import { APP_CONTROLLER } from './code/controller';
-import { UI_ROUTING } from './code/routing';
 
 angular.module('mobileApp', [
-    'ui.router',
     'mobile-angular-ui',
     'mobile-angular-ui.gestures',
 ])
-.config(UI_ROUTING)
 .controller('appController', APP_CONTROLLER);

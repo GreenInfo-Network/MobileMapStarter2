@@ -26,8 +26,7 @@ This app uses webpack to compile ES2015 code into JavaScript, and to compile SAS
 
 The basic HTML/JS framework is *mobile-angular-ui* This is basically AngularJS and an optimzied build of Bootstrap 3. Read more: http://mobileangularui.com/docs/
 
-For internal hyperlinks, *angular-ui-router* is used. This means that in your HTML should use `ui-sref` tags and the `$stateProvider` To navigate to a page programatically, use `$state.go()`
-
+Page-changing is done via mobile-angular-ui's *SharedState* service. See the `whichPage` variable in `index.html` for how the pages are turned, and see `ui-set whichPage` in the `sidebar.html` and `navbar-bottom.html` for examples of triggering the page change.
 
 
 ## DEVELOPMENT QUICK START
@@ -41,7 +40,7 @@ An overview of the files:
   * This should act as an entry point to `require()` your SCSS, HTML, etc.
   * Basic entry points would be controller.js, index.scss, etc. but if you use watch mode you may also want to add the templates under `html/` so the watch will recompile when those change.  
 * `code/*.js` -- Additional JavaScript code to support `index.js`
-  * Starting convention includes a `routing.js` and `controller.js` which are imported into `index.js` to bootstrap the application. You may expand upon this as you like.
+  * This is a good place to put your JavaScript code.
 * `www/index.html` -- The skeleton of the app's HTML rendering.
   * This includes the various script and link tags for loading CSS and JS libraries, and provides the basic layout.
   * For the most part, this is a skeleton and you'll want to work within the `html/*.html` templates for specific panels/pages within your app.
@@ -60,3 +59,9 @@ An overview of the files:
 The app directory has a *yarn.lock* file for installing packages related to webpack and compiling JS/SASS. The `www/` folder has a separate `yarn.lock` file, for dependencies used in the web app. Keeping them separate makes for easier maintainability of the www components versus the build system, should you have your own preferred build system. For your use case, perhaps merging and then require()'ing the libs makes sense.
 
 After making changes to the HTML/CSS/JS files, the apps won't be rebuilt by Cordova (and thus visible to Xcode et al) until you issue a `cordova prepare` If you're using the provided webpack config, there is already a shell command which will run this for you.
+
+The page-changing system using *SharedState* was not my first choice, but ngRoute and ui.router both provided unsuitable. Ultimately, I used a combination of `ui-show` and `ng-include` behaviors to create a similar effect, but without the problems. 
+  * They lazy-load partial views so elements are not in the DOM at startup. For code which expects to attach behaviors such as Leaflet, this is unhealthy.
+  * The partial view content is unloaded from the DOM when it leaves visibility. This means map tiles, map state, etc. are effectively lost. While a workaround could be to destroy and reinitialize the whole map every time you visit it... no.
+  
+

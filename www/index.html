@@ -9,11 +9,10 @@
         <!-- cordova placeholder; yeah it doesn't exist -->
         <script src="cordova.js"></script>
 
-        <!-- AngularJS and ui-router -->
+        <!-- AngularJS -->
         <script src="node_modules/angular/angular.js"></script>
-        <script src="node_modules/angular-ui-router/release/angular-ui-router.js"></script>
 
-        <!-- UI library -->
+        <!-- mobile-angular-ui UI library, which alos handles the page-turning state transition -->
         <link rel="stylesheet" href="node_modules/mobile-angular-ui/dist/css/mobile-angular-ui-base.css" />
         <script src="node_modules/mobile-angular-ui/dist/js/mobile-angular-ui.js"></script>
         <script src="node_modules/mobile-angular-ui/dist/js/mobile-angular-ui.gestures.js"></script>
@@ -26,7 +25,11 @@
         <script src="bundle.js"></script>
         <link rel="stylesheet" type="text/css" href="bundle.css" />
     </head>
-    <body ng-app="mobileApp" ng-controller="appController" ui-prevent-touchmove-defaults>
+
+    <!-- use the SharedState service to set whichPage, to show show only one page at a time in the div.app-body
+         ui-router and the framework's own router, just lazy-load partial views, so they aren't available for DOM stuff such as Leaflet,
+         and they forget their state entirely when you navigate away... -->
+    <body ng-app="mobileApp" ng-controller="appController" ui-prevent-touchmove-defaults ui-shared-state="whichPage">
         <!-- sidebar -->
         <span ng-include="'html/sidebar.html'"></span>
 
@@ -34,11 +37,13 @@
             <span ng-include="'html/navbar-top.html'"></span>
             <span ng-include="'html/navbar-bottom.html'"></span>
 
-            <!-- div.app main app body -->
             <div class="app-body">
-                <div class="app-content" ui-view></div>
+                <span ui-show="whichPage == 'welcome'" ng-include="'html/welcome.html'"></span>
+                <span ui-show="whichPage == 'about'" ng-include="'html/about.html'"></span>
+                <span ui-show="whichPage == 'map'" ng-include="'html/map.html'"></span>
             </div>
-        </div><!-- div.app -->
+
+        </div><!-- div.app wrapper -->
 
         <!-- Modals and Overlays will go here -->
         <div ui-yield-to="modals"></div>
