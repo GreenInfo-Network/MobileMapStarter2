@@ -1,11 +1,5 @@
 export const APP_CONTROLLER = function ($scope, SharedState) {
     //
-    // initialization: define the currently-selected page
-    // see the whichPage stuff in index.html for switching pages
-    //
-    SharedState.initialize($scope, "whichPage", 'welcome');
-
-    //
     // initialization: a Leaflet Map in $scope.map
     // has to be done asynchronously since Angular may not have loaded map.html yet
     //

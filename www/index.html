@@ -38,7 +38,7 @@
             <span ng-include="'html/navbar-bottom.html'"></span>
 
             <div class="app-body">
-                <span ui-show="whichPage == 'welcome'" ng-include="'html/welcome.html'"></span>
+                <span ui-show="whichPage == 'welcome' || ! whichPage" ng-include="'html/welcome.html'"></span>
                 <span ui-show="whichPage == 'about'" ng-include="'html/about.html'"></span>
                 <span ui-show="whichPage == 'map'" ng-include="'html/map.html'"></span>
             </div>
