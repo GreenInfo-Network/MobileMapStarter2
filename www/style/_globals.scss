@@ -1,22 +1,33 @@
 /*
 GLOBALS for styling various colors that you'll probably want to customize
-Of course, there's nothing stopping you from editing the other .scss files too, but for convenience there are robably the first items you'll customize.
+Of course, there's nothing stopping you from editing the other .scss files too,
+but for convenience there are robably the first items you'll customize.
 */
 
 /* NAVBAR */
 $navbar-background-color: white;
 $navbar-text-color: black;
 $navbar-border-color: #ccc;
+$navbar-font: 'Courier';
 
 /* MAIN CONTENT PANEL */
 $appcontent-background-color: #FAFAFA;
-$appcontent-text-color: black;
+
+$appcontent-text-color: #333;
+$maincontent-text-font: 'Times New Roman';
 $appcontent-link-color: blue;
+
+$maincontent-heading-font: 'Helvetica';
+$maincontent-heading-color: black;
 
 /* SIDEBAR */
 $sidebar-background-color: black;
+
 $sidebar-title-color: white;
+$sidebar-title-font: 'Helvetica';
+
 $sidebar-border-color: green;
+$sidebar-item-font: 'Helvetica';
 
 $sidebar-item-background-color: white;
 $sidebar-item-text-color: black;

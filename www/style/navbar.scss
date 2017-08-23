@@ -6,6 +6,7 @@
     border-width: 1px;
     border-style: solid;
     color: $navbar-text-color;
+    font-family: $navbar-font;
 
     /* size + color of corner-floating buttons */
     div.btn-group {
@@ -13,17 +14,9 @@
             color: $navbar-text-color;
             font-size: 20px;
         }
-    }
-}
-
-.app-content {
-    /* the main app content panel, between the top and bottom navbars */
-    background-color: $appcontent-background-color;
-    color: $appcontent-text-color;
-
-    a {
-        color: $appcontent-link-color;
-        font-weight: bold;
+        a {
+            font-family: $navbar-font;
+        }
     }
 }
 

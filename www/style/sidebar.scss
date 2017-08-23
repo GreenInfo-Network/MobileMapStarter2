@@ -7,12 +7,14 @@
 
     h1 {
         color: $sidebar-title-color;
+        font-family: $sidebar-title-font;
     }
 
     .list-group-item {
         background: $sidebar-item-background-color;
         color: $sidebar-item-text-color;
         border-color: $sidebar-border-color;
+        font-family: $sidebar-item-font;
     }
     .list-group-item.active {
         background: $sidebar-item-background-color-active;
