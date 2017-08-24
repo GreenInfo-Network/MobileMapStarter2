@@ -16,6 +16,10 @@
         border-color: $sidebar-border-color;
         font-family: $sidebar-item-font;
     }
+    .list-group-item:active {
+        background: $sidebar-item-background-color-clicking;
+        color: $sidebar-item-text-color-clicking;
+    }
     .list-group-item.active {
         background: $sidebar-item-background-color-active;
         border-color: $sidebar-item-background-color-active;

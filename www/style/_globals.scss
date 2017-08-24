@@ -7,6 +7,7 @@ but for convenience there are robably the first items you'll customize.
 /* NAVBARS */
 $navbar-background-color: white;
 $navbar-text-color: black;
+$navbar-text-color-clicking: silver;
 $navbar-border-color: #ccc;
 $navbar-font: 'Arial';
 $navbar-bottom-buttons-color: #666;
@@ -35,3 +36,6 @@ $sidebar-item-text-color: #333;
 
 $sidebar-item-background-color-active: #333;
 $sidebar-item-text-color-active: white;
+
+$sidebar-item-background-color-clicking: white;
+$sidebar-item-text-color-clicking: #333;

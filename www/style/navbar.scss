@@ -17,6 +17,10 @@
         a {
             font-family: $navbar-font;
         }
+        a:active, a:active i {
+            color: $navbar-text-color-clicking;
+            opacity: 1; /* stylesheet gives 0.6 for a fade effect, disable that */
+        }
     }
 }
 
@@ -41,6 +45,10 @@
         i {
             font-size: 22px;
             color: $navbar-bottom-buttons-color;
+        }
+        a:active, a:active i {
+            color: $navbar-text-color-clicking;
+            opacity: 1; /* stylesheet gives 0.6 for a fade effect, disable that */
         }
     }
 }
