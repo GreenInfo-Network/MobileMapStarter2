@@ -1,19 +1,19 @@
 <div class="navbar navbar-app navbar-absolute-bottom">
     <div class="navbar-brand navbar-brand-center">
         <div class="btn-group justified">
-            <a href ui-set="{whichPage: 'welcome'}">
+            <a href ng-click="selectPage('welcome');">
                 <i class="fa fa-home"></i>
                 <br/>
                 Home
             </a>
 
-            <a href ui-set="{whichPage: 'map'}">
+            <a href ng-click="selectPage('map');">
                 <i class="fa fa-map-marker"></i>
                 <br/>
                 Map
             </a>
 
-            <a href ui-set="{whichPage: 'about'}">
+            <a href ng-click="selectPage('about');">
                 <i class="fa fa-info-circle"></i>
                 <br/>
                 About

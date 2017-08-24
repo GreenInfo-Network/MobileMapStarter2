@@ -3,9 +3,25 @@
         Top Navbar
     </div>
 
-    <div class="btn-group pull-left">
-        <div class="btn btn-navbar">
+    <!--
+    the button lists on the right and left, are context sensitive based on whichPage
+    so as to show relevant links/buttons based on current context, e.g. a Back button from Map Settings to the Map
+    -->
+
+    <!-- left-anchored button -->
+    <div class="btn-group pull-left" ng-switch="selectedPage">
+        <div class="btn btn-navbar" ng-switch-when="mapsettings">
+            <a href ng-click="selectPage('map');"><i class="fa fa-chevron-left"></i> Back</a>
+        </div>
+        <div class="btn btn-navbar" ng-switch-default>
             <a href ui-toggle="uiSidebarLeft"><i class="fa fa-bars"></i></a>
+        </div>
+    </div>
+
+    <!-- right-anchored button -->
+    <div class="btn-group pull-right" ng-switch="selectedPage">
+        <div class="btn btn-navbar" ng-switch-when="map">
+            <a href ng-click="selectPage('mapsettings');"><i class="fa fa-gear"></i></a>
         </div>
     </div>
 </div>

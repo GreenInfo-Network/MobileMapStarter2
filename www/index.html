@@ -26,9 +26,10 @@
         <link rel="stylesheet" type="text/css" href="bundle.css" />
     </head>
 
-    <!-- use the SharedState service to set whichPage, to show show only one page at a time in the div.app-body
-         ui-router and the framework's own router, just lazy-load partial views, so they aren't available for DOM stuff such as Leaflet,
-         and they forget their state entirely when you navigate away... -->
+    <!-- the selectedPage scope variable, is used to show show only one page at a time in the div.app-body
+         ngRoute and ui.router lazy-load and auto-unload pages not currently in view, which is poison for maps and other expensive behaviors
+         so we load them all into DOM, then show the relevant selectedPage
+    -->
     <body ng-app="mobileApp" ng-controller="appController" ui-prevent-touchmove-defaults ui-shared-state="whichPage">
         <!-- sidebar -->
         <span ng-include="'html/sidebar.html'"></span>
@@ -38,9 +39,10 @@
             <span ng-include="'html/navbar-bottom.html'"></span>
 
             <div class="app-body">
-                <span ui-show="whichPage == 'welcome' || ! whichPage" ng-include="'html/welcome.html'"></span>
-                <span ui-show="whichPage == 'about'" ng-include="'html/about.html'"></span>
-                <span ui-show="whichPage == 'map'" ng-include="'html/map.html'"></span>
+                <span ng-show="selectedPage == 'welcome'" ng-include="'html/welcome.html'"></span>
+                <span ng-show="selectedPage == 'about'" ng-include="'html/about.html'"></span>
+                <span ng-show="selectedPage == 'map'" ng-include="'html/map.html'"></span>
+                <span ng-show="selectedPage == 'mapsettings'" ng-include="'html/mapsettings.html'"></span>
             </div>
 
         </div><!-- div.app wrapper -->
