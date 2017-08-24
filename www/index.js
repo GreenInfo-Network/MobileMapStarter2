@@ -12,6 +12,7 @@ require('./index.scss');
 require('./index.html');
 require('./html/about.html');
 require('./html/map.html');
+require('./html/mapsettings.html');
 require('./html/navbar-bottom.html');
 require('./html/navbar-top.html');
 require('./html/sidebar.html');
