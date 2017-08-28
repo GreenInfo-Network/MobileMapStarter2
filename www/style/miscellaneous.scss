@@ -1,0 +1,9 @@
+/*
+ * MISCELLANEOUS HACKS AND OVERRIDES
+ * applicable to the whole app, not specific panels
+ */
+
+/* Bootstrap doesn't have this combination built in: a btn-group with btn-block, a 100%-width button group */
+.btn-group-vertical.btn-group-block {
+    width: 100%;
+}

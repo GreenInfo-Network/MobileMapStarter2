@@ -1,7 +1,12 @@
 <div class="scrollable">
     <div class="scrollable-content">
         <div class="section">
-Map Settings
+            <h2>Base Map</h2>
+            <div class="btn-group-vertical btn-group-block" role="group">
+                <a ng-class="{'btn':true, 'btn-primary':app.selectedBasemap=='osm', 'btn-default':app.selectedBasemap!='osm' }" href ng-click="app.selectBasemap('osm'); app.selectPage('map');">OSM</a>
+                <a ng-class="{'btn':true, 'btn-primary':app.selectedBasemap=='esritopo', 'btn-default':app.selectedBasemap!='esritopo'  }" href ng-click="app.selectBasemap('esritopo'); app.selectPage('map');">Topo</a>
+                <a ng-class="{'btn':true, 'btn-primary':app.selectedBasemap=='esriimagery', 'btn-default':app.selectedBasemap!='esriimagery'  }" href ng-click="app.selectBasemap('esriimagery'); app.selectPage('map');">ESRI Imagery</a>
+            </div>
         </div>
     </div>
 </div>

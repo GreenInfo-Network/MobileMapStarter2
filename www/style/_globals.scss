@@ -40,3 +40,27 @@ $sidebar-item-text-color-active: white;
 
 $sidebar-item-background-color-clicking: white;
 $sidebar-item-text-color-clicking: #333;
+
+/* BUTTONS, STANDARD BOOTSTRAP STUFF but conveniently here for you to override */
+.btn.btn-default {
+    /*
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+    */
+}
+.btn.btn-primary {
+    /*
+    color: #fff;
+    background-color: #007aff;
+    border-color: #006ee6;
+    */
+}
+.btn.btn-success {
+}
+.btn.btn-info {
+}
+.btn.btn-warning {
+}
+.btn.btn-danger {
+}

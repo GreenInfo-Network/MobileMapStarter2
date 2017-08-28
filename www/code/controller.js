@@ -24,12 +24,14 @@ export class APP_CONTROLLER {
     // constructor
     // match this argument list to the $inject list provided below... or weird things will happen
     //
-    constructor ($scope) {
+    constructor ($scope, SETTINGS) {
         // injections we want to pass into other methods (sigh)
         this.$scope = $scope; // typically, just assign to "this" to assign to scope, but you may need to access $scope.$watch
+        this.SETTINGS = SETTINGS;
 
         // starting state: selected page, map variables, ...
-        this.selectedPage = 'welcome';
+        this.selectedPage = this.SETTINGS.startingPage;
+        this.selectedBasemap = undefined; // see selectBasemap immediately below
 
         // start the map when the element becomes ready
         // watch for a page change into 'map' so we can fix Leaflet's hatred of being invisible
@@ -40,18 +42,21 @@ export class APP_CONTROLLER {
             clearInterval(map_startup_timer); // found it, quit checking and get moving
 
             this.map = L.map(map_div_id, {
-            }).setView([ 0, 0 ], 1 );
+                minZoom: this.SETTINGS.minZoom,
+                maxZoom: this.SETTINGS.maxZoom,
+            }).fitBounds(this.SETTINGS.startingBounds);
 
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            }).addTo(this.map);
+            this.map.basemaps = this.SETTINGS.basemaps;
+
+            this.selectBasemap(this.SETTINGS.startingBasemap);
         }, 100);
 
         $scope.$watch(() => this.selectedPage, this.watchPageChangeForMapResize());
     }
 
     watchPageChangeForMapResize () {
-        return (newVal) => {
-            if (newVal !== 'map') return;
+        return (newpage) => {
+            if (newpage !== 'map') return;
             if (! this.map) return; // there is no Map yet, so skip it; should never happen
 
             setTimeout(() => {
@@ -60,12 +65,21 @@ export class APP_CONTROLLER {
         };
     }
 
-    //
-    // method for switching between pages
-    //
     selectPage (which) {
         this.selectedPage = which;
     }
+
+    selectBasemap (which) {
+        this.selectedBasemap = which;
+        Object.entries(this.map.basemaps).forEach(([name, maplayer]) => {
+            if (name == which) {
+                this.map.addLayer(maplayer);
+            }
+            else {
+                this.map.removeLayer(maplayer);
+            }
+        });
+    }
 }
 
-APP_CONTROLLER.$inject = ['$scope' ];
+APP_CONTROLLER.$inject = ['$scope', 'SETTINGS' ];

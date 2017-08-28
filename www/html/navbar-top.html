@@ -9,9 +9,9 @@
     -->
 
     <!-- left-anchored button -->
-    <div class="btn-group pull-left" ng-switch="selectedPage">
+    <div class="btn-group pull-left" ng-switch="app.selectedPage">
         <div class="btn btn-navbar" ng-switch-when="mapsettings">
-            <a href ng-click="selectPage('map');"><i class="fa fa-chevron-left"></i> Back</a>
+            <a href ng-click="app.selectPage('map');"><i class="fa fa-chevron-left"></i> Back</a>
         </div>
         <div class="btn btn-navbar" ng-switch-default>
             <a href ui-toggle="uiSidebarLeft"><i class="fa fa-bars"></i></a>
@@ -19,9 +19,9 @@
     </div>
 
     <!-- right-anchored button -->
-    <div class="btn-group pull-right" ng-switch="selectedPage">
+    <div class="btn-group pull-right" ng-switch="app.selectedPage">
         <div class="btn btn-navbar" ng-switch-when="map">
-            <a href ng-click="selectPage('mapsettings');"><i class="fa fa-gear"></i></a>
+            <a href ng-click="app.selectPage('mapsettings');"><i class="fa fa-gear"></i></a>
         </div>
     </div>
 </div>

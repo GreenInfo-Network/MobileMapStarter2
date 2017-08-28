@@ -1,4 +1,9 @@
 //
+// some polyfills e.g. Object.entries()
+//
+require('core-js/fn/object/entries');
+
+//
 // include the root SCSS file, which may @import from styles/*.scss
 // this will form bundle.css
 //
@@ -23,9 +28,11 @@ require('./html/welcome.html');
 //
 
 import { APP_CONTROLLER } from './code/controller';
+import { SETTINGS } from './code/settings';
 
 angular.module('mobileApp', [
     'mobile-angular-ui',
     'mobile-angular-ui.gestures',
 ])
+.constant('SETTINGS', SETTINGS)
 .controller('appController', APP_CONTROLLER);
