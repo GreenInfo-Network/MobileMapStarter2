@@ -3,7 +3,9 @@
     "version": "1.0.0",
     "scripts": {
         "build": "webpack --config webpack.config.js --hide-modules=true --display-origins=false --display-provided-exports=false --colors --progress",
-        "watch": "webpack --config webpack.config.js --hide-modules=true --display-origins=false --display-provided-exports=false --colors --progress --watch"
+        "watch": "webpack --config webpack.config.js --hide-modules=true --display-origins=false --display-provided-exports=false --colors --progress --watch",
+        "splash": "cordova-splash",
+        "icon": "cordova-icon"
     },
     "author": "GreenInfo Network",
     "license": "Apache-2.0",
@@ -35,6 +37,8 @@
         "babel-core": "^6.26.0",
         "babel-loader": "^7.1.2",
         "babel-preset-es2015": "^6.24.1",
+        "cordova-icon": "^0.9.1",
+        "cordova-splash": "^0.9.0",
         "css-loader": "^0.28.5",
         "extract-text-webpack-plugin": "^3.0.0",
         "ignore-loader": "^0.1.2",

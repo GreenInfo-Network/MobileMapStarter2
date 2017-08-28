@@ -6,6 +6,8 @@ You will also want to run `yarn install` in the `www/` folder, to install the co
 
 If you are setting up this project, run `cordova prepare` to fetch plugins and platforms.
 
+If you are setting up this project, you will also need to install ImageMagick via apt, brew, or binary download.
+
 Recommended settings for iOS, done via Xcode.
 * Open the project file in Xcode.
 * In its General tab:
@@ -28,18 +30,22 @@ The basic HTML/JS framework is *mobile-angular-ui* This is basically AngularJS a
 
 Page-changing is done via mobile-angular-ui's *SharedState* service. See the `whichPage` variable in `index.html` for how the pages are turned, and see `ui-set whichPage` in the `sidebar.html` and `navbar-bottom.html` for examples of triggering the page change.
 
+Icon and splash screen are generated from *splash.png* and *icon.png*  See their repositories' documentation for more info: [cordova-splash](https://github.com/AlexDisler/cordova-splash) and [cordva-icon](https://github.com/AlexDisler/cordova-icon)
+
 
 ## DEVELOPMENT QUICK START
 
 The essential commands:
-`npm run build`
-`npm run watch`
+* `npm run build` -- Compile the SASS and JS files.
+* `npm run watch` -- Compile the SASS and JS files, then watch them for changes and recompile as needed.
+* `npm run icon` -- Generate a new set of app icons from *icon.png*
+* `npm run splash` -- Generate a new set of app splash screens from *splash.png*
 
 An overview of the files:
 * `www/index.js` -- The entry point for webpack
   * This should act as an entry point to `require()` your SCSS, HTML, etc.
   * Basic entry points would be controller.js, index.scss, etc. but if you use watch mode you may also want to add the templates under `html/` so the watch will recompile when those change.  
-* `code/*.js` -- Additional JavaScript code to support `index.js`
+* `www/code/*.js` -- Additional JavaScript code to support `index.js`
   * This is a good place to put your JavaScript code.
 * `www/index.html` -- The skeleton of the app's HTML rendering.
   * This includes the various script and link tags for loading CSS and JS libraries, and provides the basic layout.
@@ -49,8 +55,10 @@ An overview of the files:
   * You may want to `require()` these in `index.js` Webpack won't do anything with them, but if you use watch mode and it is listed, then changing the file will trigger a recompile.
 * `www/index.scss` -- SASS stylesheet starting point.
   * The entry point for SASS styles. Depending on your preference, you may want to have it `@import` in a modular fashion from the `style/*.scss` files.
-* `style/*.scss` -- SASS stylesheets.
+* `www/style/*.scss` -- SASS stylesheets.
   * Provided as a convention, in case your workflow fits well with breaking up a monolithic `index.scss` insto smaller chunks.
+* `splash.png` -- This will be cropped and resized to generate the app's splash screen for various platforms and devices. Read more: [cordova-splash](https://github.com/AlexDisler/cordova-splash)
+* `icon.png` -- This will be cropped and resized to generate the app's icon for various platforms and devices. Read more: [cordva-icon](https://github.com/AlexDisler/cordova-icon)
 
 
 
