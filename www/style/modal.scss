@@ -1,0 +1,22 @@
+.modal-header {
+    text-align: center;
+
+    .modal-title {
+        font-weight: bold;
+
+        border-bottom: 0 none transparent;
+    }
+    button {
+        font-size: 24px;
+        font-weight: bold;
+        color: black;
+        opacity: 1;
+    }
+}
+
+.modal-body {
+    text-align: center;
+    font-size: 20px;
+
+    border-bottom: 0 none transparent;
+}

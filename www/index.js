@@ -33,6 +33,7 @@ import { SETTINGS } from './code/settings';
 angular.module('mobileApp', [
     'mobile-angular-ui',
     'mobile-angular-ui.gestures',
+    'ui.toggle',
 ])
 .constant('SETTINGS', SETTINGS)
 .controller('appController', APP_CONTROLLER);

@@ -21,6 +21,10 @@
         <script src="node_modules/leaflet/dist/leaflet-src.js"></script>
         <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" />
 
+        <!-- UI addons and custom widgets -->
+        <script src="node_modules/angular-bootstrap-toggle/dist/angular-bootstrap-toggle.js"></script>
+        <link rel="stylesheet" href="node_modules/angular-bootstrap-toggle/dist/angular-bootstrap-toggle.css" />
+
         <!-- our own awesomesauce -->
         <script src="bundle.js"></script>
         <link rel="stylesheet" type="text/css" href="bundle.css" />
@@ -47,7 +51,28 @@
 
         </div><!-- div.app wrapper -->
 
-        <!-- Modals and Overlays will go here -->
+        <!-- Modals and Overlays will be drawn here, and defined below -->
         <div ui-yield-to="modals"></div>
+
+
+        <div ui-content-for="modals">
+            <div class="modal modal-overlay" ng-if="globalmodal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button class="close" ng-click="app.modalMessageClear();">&times;</button>
+                            <h3 class="modal-title">{{ globalmodal.title }}</h3>
+                        </div>
+                        <div class="modal-body">
+                            <p>{{ globalmodal.message }}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button ng-click="app.modalMessageClear();" class="btn btn-primary btn-lg">{{ globalmodal.closebutton }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </body>
 </html>

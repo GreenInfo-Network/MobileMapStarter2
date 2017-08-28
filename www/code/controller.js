@@ -24,17 +24,21 @@ export class APP_CONTROLLER {
     // constructor
     // match this argument list to the $inject list provided below... or weird things will happen
     //
-    constructor ($scope, SETTINGS) {
+    constructor ($scope, SETTINGS, SharedState) {
         // injections we want to pass into other methods (sigh)
         this.$scope = $scope; // typically, just assign to "this" to assign to scope, but you may need to access $scope.$watch
         this.SETTINGS = SETTINGS;
+        this.SharedState = SharedState;
 
         // starting state: selected page, map variables, ...
         this.selectedPage = this.SETTINGS.startingPage;
-        this.selectedBasemap = undefined; // see selectBasemap immediately below
+        this.selectedBasemap = undefined; // see call to selectBasemap() immediately below
+        this.globalmodal = undefined; // see modalMessageShow() to show a global modal prompt
+        this.mapFollowMyLocation = true;
 
-        // start the map when the element becomes ready
-        // watch for a page change into 'map' so we can fix Leaflet's hatred of being invisible
+        // start the map when the element becomes ready; the L.Map is available as this.map
+        // also, watch for a page change into 'map' so we can fix Leaflet's hatred of being invisible
+        // start geolocation as this.geolocation
         const map_div_id = 'map-map';
         const map_startup_timer = setInterval(() => {
             var div = document.getElementById(map_div_id);
@@ -49,11 +53,36 @@ export class APP_CONTROLLER {
             this.map.basemaps = this.SETTINGS.basemaps;
 
             this.selectBasemap(this.SETTINGS.startingBasemap);
+
+            // see handleLocationChange() and configure it to your use case
+            // weird quirk: this needs an additional delay or else it just doesn't work with the UI and all; 2 hours figuring that out...
+            setTimeout(() => {
+                this.geolocation = navigator.geolocation.watchPosition(
+                    (position) => {
+                        console.log([ 'watchPosition OK', position.coords.latitude, position.coords.longitude ]);
+                        this.$scope.$apply(() => { // for some reason geolocation means we need to apply() this...
+                            this.currentPosition = position;
+                        });
+                    },
+                    (error) => {
+                        console.log([ 'watchPosition error', error.message ]);
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,  // Android quirk: if timeout is not given, error callback won't happen, so supply that
+                    }
+                );
+            }, 1000);
         }, 100);
+
+        $scope.$watch(() => this.currentPosition, this.handleLocationChange());
+
+        $scope.$watch(() => this.mapFollowMyLocation, this.toggleLocationChangeWatcher());
 
         $scope.$watch(() => this.selectedPage, this.watchPageChangeForMapResize());
     }
 
+    // Map helper: make sure to call invalidateSize() when the map becomes visible (a Leaflet thing, trust me)
     watchPageChangeForMapResize () {
         return (newpage) => {
             if (newpage !== 'map') return;
@@ -65,10 +94,41 @@ export class APP_CONTROLLER {
         };
     }
 
+    // when our locations changes OR we toggle track-me-on-the-map behavior, do this...
+    // position is a W3C geolocation position object; you may want to massage into a [ lat, lng ] for Leaflet
+    handleLocationChange () {
+        return (position) => {
+            console.log([ 'handleLocationChange', position ]);
+            if (this.mapFollowMyLocation) {
+                this.updatePositionOnMap();
+            }
+        };
+    }
+    toggleLocationChangeWatcher () {
+        return (nowtracking) => {
+            console.log([ 'toggleLocationChangeWatcher', nowtracking ]);
+            if (nowtracking) {
+                this.updatePositionOnMap();
+            }
+        };
+    }
+    updatePositionOnMap () {
+        console.log([ 'updatePositionOnMap', this.currentPosition ]);
+        const latlng = [ this.currentPosition.coords.latitude, this.currentPosition.coords.longitude ];
+        if (! this.map.mylocation) {
+            this.map.mylocation = L.marker(latlng).addTo(this.map);
+        }
+        this.map.mylocation.setLatLng(latlng);
+        this.map.setView(latlng, 14);
+    }
+
+    // simple wrapper to select whichPage() so as to turn pages
     selectPage (which) {
         this.selectedPage = which;
     }
 
+    // simple wrapper to define selectedBasemap and to update the map to use that basemap
+    // equally correct, would be to simply set this.selectedBasemap here and have a $watch which updates the map
     selectBasemap (which) {
         this.selectedBasemap = which;
         Object.entries(this.map.basemaps).forEach(([name, maplayer]) => {
@@ -80,6 +140,20 @@ export class APP_CONTROLLER {
             }
         });
     }
+
+    // utility methods to show a modal with a title + message + OK button
+    modalMessageShow(message='', title='', closebutton='OK') {
+        this.$scope.$apply( () => { // no idea why we need to do this here, and nowhere else
+            this.$scope.globalmodal = {
+                message,
+                title,
+                closebutton,
+            };
+        });
+    }
+    modalMessageClear () {
+        this.$scope.globalmodal = undefined;
+    }
 }
 
-APP_CONTROLLER.$inject = ['$scope', 'SETTINGS' ];
+APP_CONTROLLER.$inject = ['$scope', 'SETTINGS', 'SharedState' ];
