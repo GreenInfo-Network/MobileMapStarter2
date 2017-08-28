@@ -24,17 +24,16 @@ export class APP_CONTROLLER {
     // constructor
     // match this argument list to the $inject list provided below... or weird things will happen
     //
-    constructor ($scope, SETTINGS, SharedState) {
+    constructor ($scope, SETTINGS) {
         // injections we want to pass into other methods (sigh)
         this.$scope = $scope; // typically, just assign to "this" to assign to scope, but you may need to access $scope.$watch
         this.SETTINGS = SETTINGS;
-        this.SharedState = SharedState;
 
         // starting state: selected page, map variables, ...
         this.selectedPage = this.SETTINGS.startingPage;
         this.selectedBasemap = undefined; // see call to selectBasemap() immediately below
         this.globalmodal = undefined; // see modalMessageShow() to show a global modal prompt
-        this.mapFollowMyLocation = true;
+        this.mapFollowMyLocation = false;
 
         // start the map when the element becomes ready; the L.Map is available as this.map
         // also, watch for a page change into 'map' so we can fix Leaflet's hatred of being invisible
@@ -53,6 +52,15 @@ export class APP_CONTROLLER {
             this.map.basemaps = this.SETTINGS.basemaps;
 
             this.selectBasemap(this.SETTINGS.startingBasemap);
+
+            var geocoder = L.Control.geocoder({
+                defaultMarkGeocode: false,
+                // for more info see https://github.com/perliedman/leaflet-control-geocoder
+            })
+            .on('markgeocode', (event) => {
+                this.handleGeocode(event.geocode);
+            })
+            .addTo(this.map);
 
             // see handleLocationChange() and configure it to your use case
             // weird quirk: this needs an additional delay or else it just doesn't work with the UI and all; 2 hours figuring that out...
@@ -141,6 +149,13 @@ export class APP_CONTROLLER {
         });
     }
 
+    // handle a geocode result event
+    // see the geocoder control instantiation for details as to the geocoder control and its documentation
+    // tip: zooming to the result, and also zomoing to yourself with mapFollowMyLocation, may be goofy if used at the same time
+    handleGeocode (geocoderesult) {
+        this.map.fitBounds(geocoderesult.bbox);
+    }
+
     // utility methods to show a modal with a title + message + OK button
     modalMessageShow(message='', title='', closebutton='OK') {
         this.$scope.$apply( () => { // no idea why we need to do this here, and nowhere else
@@ -156,4 +171,4 @@ export class APP_CONTROLLER {
     }
 }
 
-APP_CONTROLLER.$inject = ['$scope', 'SETTINGS', 'SharedState' ];
+APP_CONTROLLER.$inject = ['$scope', 'SETTINGS' ];
