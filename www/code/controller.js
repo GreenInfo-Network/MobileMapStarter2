@@ -109,6 +109,8 @@ export class APP_CONTROLLER {
 
     // when our locations changes OR we toggle track-me-on-the-map behavior, do this...
     // position is a W3C geolocation position object; you may want to massage into a [ lat, lng ] for Leaflet
+    // note that platforms and devices vary on how often they will send location-changes; the user may not have moved at all, or have moved only 3 meters
+    // note that currentPosition may be null if location services are denied/broken
     handleLocationChange () {
         return () => {
             console.log([ 'handleLocationChange', this.currentPosition ]);
@@ -125,7 +127,6 @@ export class APP_CONTROLLER {
             }
 
             // add here, other things you'll want to do when lcoation changes: a GPS readout, some search behavior, geofencing, ...
-            // note that platforms and devices vary on how often they will send location-changes; the user may not have moved at all, or have moved only 3 meters
         };
     }
 
