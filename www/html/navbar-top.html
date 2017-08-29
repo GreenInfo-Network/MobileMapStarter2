@@ -6,12 +6,15 @@
     <!--
     the button lists on the right and left, are context sensitive based on whichPage
     so as to show relevant links/buttons based on current context, e.g. a Back button from Map Settings to the Map
+    
+    tip: if you put the ng-click on the div.btn-navbar instead of the actual a/i button, the hitbox is larger and easier for fingers
+    if your buttons are large e.g. words, maybe not such a big gain; but for tiny/concise icon-obly button, big usability gain
     -->
 
     <!-- left-anchored button -->
     <div class="btn-group pull-left" ng-switch="app.selectedPage">
-        <div class="btn btn-navbar" ng-switch-when="mapsettings">
-            <a href ng-click="app.selectPage('map');"><i class="fa fa-chevron-left"></i> Back</a>
+        <div class="btn btn-navbar" ng-switch-when="mapsettings" ng-click="app.selectPage('map');">
+            <a href><i class="fa fa-chevron-left"></i> Back</a>
         </div>
         <div class="btn btn-navbar" ng-switch-default>
             <a href ui-toggle="uiSidebarLeft"><i class="fa fa-bars"></i></a>
@@ -20,8 +23,8 @@
 
     <!-- right-anchored button -->
     <div class="btn-group pull-right" ng-switch="app.selectedPage">
-        <div class="btn btn-navbar" ng-switch-when="map">
-            <a href ng-click="app.selectPage('mapsettings');"><i class="fa fa-gear"></i></a>
+        <div class="btn btn-navbar" ng-switch-when="map" ng-click="app.selectPage('mapsettings');">
+            <a href><i class="fa fa-gear"></i></a>
         </div>
     </div>
 </div>
