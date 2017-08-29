@@ -26,6 +26,8 @@
     <engine name="android" spec="^6.2.3" />
     <engine name="ios" spec="^4.4.0" />
     <plugin name="cordova-plugin-console" spec="git+https://github.com/apache/cordova-plugin-console.git" />
+    <plugin name="cordova-plugin-file" spec="^4.3.3" />
+    <plugin name="cordova-plugin-file-transfer" spec="^1.6.3" />
     <plugin name="cordova-plugin-geolocation" spec="git+https://github.com/apache/cordova-plugin-geolocation.git">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value=" " />
     </plugin>

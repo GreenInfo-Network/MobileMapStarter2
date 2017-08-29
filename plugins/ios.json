@@ -19,6 +19,12 @@
         "cordova-plugin-geolocation": {
             "GEOLOCATION_USAGE_DESCRIPTION": " ",
             "PACKAGE_NAME": "org.greeninfo.mobilemapstarter2"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "org.greeninfo.mobilemapstarter2"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "org.greeninfo.mobilemapstarter2"
         }
     },
     "dependent_plugins": {

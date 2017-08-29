@@ -38,67 +38,23 @@ export class APP_CONTROLLER {
         // start the map when the element becomes ready; the L.Map is available as this.map
         // also, watch for a page change into 'map' so we can fix Leaflet's hatred of being invisible
         // start geolocation as this.geolocation
-        const map_div_id = 'map-map';
-        const map_startup_timer = setInterval(() => {
-            var div = document.getElementById(map_div_id);
-            if (! div) return; // try again next tick
-            clearInterval(map_startup_timer); // found it, quit checking and get moving
+        document.addEventListener("deviceready", () => {
+            const map_startup_timer = setInterval(() => {
+                if (! document.getElementById('map-map')) return; // try again next tick
+                clearInterval(map_startup_timer);
+                this.initMapAndGeolocation();
+            }, 100); // end of map-init timer
+        }, false);
 
-            this.map = L.map(map_div_id, {
-                minZoom: this.SETTINGS.minZoom,
-                maxZoom: this.SETTINGS.maxZoom,
-            }).fitBounds(this.SETTINGS.startingBounds);
+        //
+        // start watching things
+        //
 
-            this.map.basemaps = this.SETTINGS.basemaps;
+        // geolocation events and toggling of the follow-me flag
+        $scope.$watch(() => this.currentPosition, this.handleLocationChange());
+        $scope.$watch(() => this.mapFollowMyLocation, this.handleLocationChange());
 
-            this.selectBasemap(this.SETTINGS.startingBasemap);
-
-            // add map control: geocoder
-            // for more info see https://github.com/perliedman/leaflet-control-geocoder
-            var geocoder = L.Control.geocoder({
-                defaultMarkGeocode: false,
-                collapse: true,
-                expand: 'touch',
-            })
-            .on('markgeocode', (event) => {
-                this.handleGeocode(event.geocode);
-            })
-            .addTo(this.map);
-
-            // begin geolocation tracking
-            // see handleLocationChange() and configure it to your use case
-            // weird quirk: this needs an additional delay or else it just doesn't work with the UI and all; 2 hours figuring that out...
-            this.map.mylocation = L.marker([ 0, 0 ], {
-                icon: L.icon({
-                    iconUrl: 'images/geolocation.png',
-                    iconSize: [30, 30],
-                    iconAnchor: [15, 15],
-                }),
-            });
-
-            setTimeout(() => {
-                this.geolocation = navigator.geolocation.watchPosition(
-                    (position) => {
-                        console.log([ 'watchPosition OK', position.coords.latitude, position.coords.longitude ]);
-                        this.$scope.$apply(() => { // for some reason geolocation means we need to apply() this...
-                            this.currentPosition = position;
-                        });
-                    },
-                    (error) => {
-                        console.log([ 'watchPosition error', error.message ]);
-                    },
-                    {
-                        enableHighAccuracy: true,
-                        timeout: 10000,  // Android quirk: if timeout is not given, error callback won't happen, so supply that
-                    }
-                );
-            }, 1000);
-
-            $scope.$watch(() => this.currentPosition, this.handleLocationChange());
-            $scope.$watch(() => this.mapFollowMyLocation, this.handleLocationChange());
-        }, 100);
-
-        // watch for the selectedPage changing to "map" and trigger Leaflet to re-assert its size
+        // selectedPage changing to "map" should trigger Leaflet to re-assert its size
         $scope.$watch(() => this.selectedPage, (newpage) => {
             if (newpage !== 'map') return;
             if (! this.map) return; // there is no Map yet, so skip it; should never happen
@@ -107,6 +63,59 @@ export class APP_CONTROLLER {
                 this.map.invalidateSize();
             }, 20);
         });
+    }
+
+    initMapAndGeolocation () {
+        this.map = L.map('map-map', {
+            minZoom: this.SETTINGS.minZoom,
+            maxZoom: this.SETTINGS.maxZoom,
+        }).fitBounds(this.SETTINGS.startingBounds);
+
+        // create L.TileLayer.Cordova instances for the defined basemap options then select one
+        this.map.basemaps = {};
+        Object.entries(this.SETTINGS.basemaps).forEach( ([layername, layeroptions]) => {
+            if (! layeroptions.options.folder || !layeroptions.options.name) throw "settings basemaps: L.TileLayer.Cordova requires folder and name";
+            this.map.basemaps[layername] = L.tileLayerCordova(layeroptions.url, layeroptions.options);
+        });
+        this.selectBasemap(this.SETTINGS.startingBasemap);
+
+        // add map control: geocoder
+        // for more info see https://github.com/perliedman/leaflet-control-geocoder
+        var geocoder = L.Control.geocoder({
+            defaultMarkGeocode: false,
+            collapse: true,
+            expand: 'touch',
+        })
+        .on('markgeocode', (event) => {
+            this.handleGeocode(event.geocode);
+        })
+        .addTo(this.map);
+
+        // begin geolocation tracking
+        // see handleLocationChange() and configure it to your use case
+        this.map.mylocation = L.marker([ 0, 0 ], {
+            icon: L.icon({
+                iconUrl: 'images/geolocation.png',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15],
+            }),
+        });
+
+        this.geolocation = navigator.geolocation.watchPosition(
+            (position) => {
+                console.log([ 'watchPosition OK', position.coords.latitude, position.coords.longitude ]);
+                this.$scope.$apply(() => { // for some reason geolocation means we need to apply() this...
+                    this.currentPosition = position;
+                });
+            },
+            (error) => {
+                console.log([ 'watchPosition error', error.message ]);
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,  // Android quirk: if timeout is not given, error callback won't happen, so supply that
+            }
+        );
     }
 
     // when our locations changes OR we toggle track-me-on-the-map behavior, do this...
