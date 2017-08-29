@@ -13,8 +13,11 @@ export const SETTINGS = {
     ],
 
     // for the map, the mininmum and maximum zoom
-    minZoom:3,
-    maxZoom: 10,
+    minZoom:1,
+    maxZoom: 16,
+
+    // when zooming to your geolocation on the map, use this zoom level
+    mapFollowZoomLevel: 14,
 
     // for the map, the list of basemap options and which basemap is shown at startup
     // see also mapsettings.html for the UI where one selects the basemap, as you will want to tailor that to this listing and to your use case

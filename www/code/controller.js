@@ -53,17 +53,27 @@ export class APP_CONTROLLER {
 
             this.selectBasemap(this.SETTINGS.startingBasemap);
 
+            // add map control: geocoder
+            // for more info see https://github.com/perliedman/leaflet-control-geocoder
             var geocoder = L.Control.geocoder({
                 defaultMarkGeocode: false,
-                // for more info see https://github.com/perliedman/leaflet-control-geocoder
             })
             .on('markgeocode', (event) => {
                 this.handleGeocode(event.geocode);
             })
             .addTo(this.map);
 
+            // begin geolocation tracking
             // see handleLocationChange() and configure it to your use case
             // weird quirk: this needs an additional delay or else it just doesn't work with the UI and all; 2 hours figuring that out...
+            this.map.mylocation = L.marker([ 0, 0 ], {
+                icon: L.icon({
+                    iconUrl: 'images/geolocation.png',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 15],
+                }),
+            });
+
             setTimeout(() => {
                 this.geolocation = navigator.geolocation.watchPosition(
                     (position) => {
@@ -81,53 +91,42 @@ export class APP_CONTROLLER {
                     }
                 );
             }, 1000);
+
+            $scope.$watch(() => this.currentPosition, this.handleLocationChange());
+            $scope.$watch(() => this.mapFollowMyLocation, this.handleLocationChange());
         }, 100);
 
-        $scope.$watch(() => this.currentPosition, this.handleLocationChange());
-
-        $scope.$watch(() => this.mapFollowMyLocation, this.toggleLocationChangeWatcher());
-
-        $scope.$watch(() => this.selectedPage, this.watchPageChangeForMapResize());
-    }
-
-    // Map helper: make sure to call invalidateSize() when the map becomes visible (a Leaflet thing, trust me)
-    watchPageChangeForMapResize () {
-        return (newpage) => {
+        // watch for the selectedPage changing to "map" and trigger Leaflet to re-assert its size
+        $scope.$watch(() => this.selectedPage, (newpage) => {
             if (newpage !== 'map') return;
             if (! this.map) return; // there is no Map yet, so skip it; should never happen
 
             setTimeout(() => {
                 this.map.invalidateSize();
             }, 20);
-        };
+        });
     }
 
     // when our locations changes OR we toggle track-me-on-the-map behavior, do this...
     // position is a W3C geolocation position object; you may want to massage into a [ lat, lng ] for Leaflet
     handleLocationChange () {
-        return (position) => {
-            console.log([ 'handleLocationChange', position ]);
+        return () => {
+            console.log([ 'handleLocationChange', this.currentPosition ]);
+
+            // update our geolocation marker
+            // if we are tracking on the map, pan and zoom to that marker
+            const latlng = [ this.currentPosition.coords.latitude, this.currentPosition.coords.longitude ];
+
+            this.map.mylocation.setLatLng(latlng).addTo(this.map);
+
             if (this.mapFollowMyLocation) {
-                this.updatePositionOnMap();
+                console.log([ 'mapFollowMyLocation', latlng, this.SETTINGS.mapFollowZoomLevel ]);
+                this.map.setView(latlng, this.SETTINGS.mapFollowZoomLevel);
             }
+
+            // add here, other things you'll want to do when lcoation changes: a GPS readout, some search behavior, geofencing, ...
+            // note that platforms and devices vary on how often they will send location-changes; the user may not have moved at all, or have moved only 3 meters
         };
-    }
-    toggleLocationChangeWatcher () {
-        return (nowtracking) => {
-            console.log([ 'toggleLocationChangeWatcher', nowtracking ]);
-            if (nowtracking) {
-                this.updatePositionOnMap();
-            }
-        };
-    }
-    updatePositionOnMap () {
-        console.log([ 'updatePositionOnMap', this.currentPosition ]);
-        const latlng = [ this.currentPosition.coords.latitude, this.currentPosition.coords.longitude ];
-        if (! this.map.mylocation) {
-            this.map.mylocation = L.marker(latlng).addTo(this.map);
-        }
-        this.map.mylocation.setLatLng(latlng);
-        this.map.setView(latlng, 14);
     }
 
     // simple wrapper to select whichPage() so as to turn pages
