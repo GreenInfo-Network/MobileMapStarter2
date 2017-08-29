@@ -190,6 +190,7 @@ module.exports = {
 			L.DomUtil.removeClass(this._container, 'leaflet-control-geocoder-expanded');
 			L.DomUtil.addClass(this._alts, 'leaflet-control-geocoder-alternatives-minimized');
 			L.DomUtil.removeClass(this._errorElement, 'leaflet-control-geocoder-error');
+            this._input.blur(); // mobile keyboard shouldn't stay expanded
 			this.fire('collapse');
 		},
 
