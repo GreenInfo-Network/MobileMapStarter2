@@ -57,6 +57,8 @@ export class APP_CONTROLLER {
             // for more info see https://github.com/perliedman/leaflet-control-geocoder
             var geocoder = L.Control.geocoder({
                 defaultMarkGeocode: false,
+                collapse: true,
+                expand: 'touch',
             })
             .on('markgeocode', (event) => {
                 this.handleGeocode(event.geocode);
