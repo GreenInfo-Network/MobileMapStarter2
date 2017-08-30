@@ -2,6 +2,7 @@
 // some polyfills e.g. Object.entries()
 //
 require('core-js/fn/object/entries');
+require('core-js/fn/object/values');
 
 //
 // include the root SCSS file, which may @import from styles/*.scss

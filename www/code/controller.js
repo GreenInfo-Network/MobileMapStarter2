@@ -34,6 +34,11 @@ export class APP_CONTROLLER {
         this.selectedBasemap = undefined; // see call to selectBasemap() immediately below
         this.globalmodal = undefined; // see modalMessageShow() to show a global modal prompt
         this.mapFollowMyLocation = false;
+        this.offlinecache = {
+            filecount: 0,
+            filesize: 0.0,
+            busy: '',
+        };
 
         // start the map when the element becomes ready; the L.Map is available as this.map
         // also, watch for a page change into 'map' so we can fix Leaflet's hatred of being invisible
@@ -63,6 +68,12 @@ export class APP_CONTROLLER {
                 this.map.invalidateSize();
             }, 20);
         });
+
+        // selectedPage changing to "mapsettings" should calculate the tile cache usage
+        $scope.$watch(() => this.selectedPage, (newpage) => {
+            if (newpage !== 'mapsettings') return;
+            this.offlineCacheCalculateUsage();
+        });
     }
 
     initMapAndGeolocation () {
@@ -73,8 +84,8 @@ export class APP_CONTROLLER {
 
         // create L.TileLayer.Cordova instances for the defined basemap options then select one
         this.map.basemaps = {};
-        Object.entries(this.SETTINGS.basemaps).forEach( ([layername, layeroptions]) => {
-            if (! layeroptions.options.folder || !layeroptions.options.name) throw "settings basemaps: L.TileLayer.Cordova requires folder and name";
+        Object.entries(this.SETTINGS.basemaps).forEach( ([ layername, layeroptions ]) => {
+            if (! layeroptions.options.folder || !layeroptions.options.name) throw "Basemaps definitions: L.TileLayer.Cordova requires folder and name";
             this.map.basemaps[layername] = L.tileLayerCordova(layeroptions.url, layeroptions.options);
         });
         this.selectBasemap(this.SETTINGS.startingBasemap);
@@ -125,6 +136,7 @@ export class APP_CONTROLLER {
     handleLocationChange () {
         return () => {
             console.log([ 'handleLocationChange', this.currentPosition ]);
+            if (! this.currentPosition) return; // null location, do nothing
 
             // update our geolocation marker
             // if we are tracking on the map, pan and zoom to that marker
@@ -169,16 +181,140 @@ export class APP_CONTROLLER {
 
     // utility methods to show a modal with a title + message + OK button
     modalMessageShow(message='', title='', closebutton='OK') {
-        this.$scope.$apply( () => { // no idea why we need to do this here, and nowhere else
-            this.$scope.globalmodal = {
-                message,
-                title,
-                closebutton,
-            };
-        });
+        this.globalmodal = {
+            message,
+            title,
+            closebutton,
+        };
     }
     modalMessageClear () {
-        this.$scope.globalmodal = undefined;
+        this.globalmodal = undefined;
+    }
+
+    // loading the map cache from the current map view
+    // and emptying the cache
+    offlineCacheLoadCurrentView () {
+        // if they're already too far in, then bail
+        console.log([ 'offlineCacheLoadCurrentView entry', this.map.getZoom(), this.SETTINGS.offlineCacheMaxZoom, this.SETTINGS.offlineCacheMinZoom ]);
+        if (this.map.getZoom() > this.SETTINGS.offlineCacheMaxZoom) {
+            this.modalMessageShow('You are zoomed in beyond the level allowed for offline map tiles. Zoom out and try again.', 'Zoom Out');
+            return;
+        }
+        if (this.map.getZoom() < this.SETTINGS.offlineCacheMinZoom) {
+            this.modalMessageShow('You are zoomed out beyond the level allowed for offline map tiles. Zoom in and try again.', 'Zoom In');
+            return;
+        }
+
+        const lon = this.map.getCenter().lng;
+        const lat = this.map.getCenter().lat;
+        const zmin = this.map.getZoom();
+        const zmax = this.SETTINGS.offlineCacheMaxZoom;
+        const layers = Object.values(this.map.basemaps);
+        console.log([ 'offlineCacheLoadCurrentView params', lon, lat, zmin, zmax ]);
+
+        const seedLayerByIndex = (index) => {
+            // done with the last layer, so truly done
+            if (index >= layers.length) {
+                this.$scope.$apply(() => { // no idea why this is necessary when usually plain assignment works
+                    this.offlinecache.busy = "";
+                    this.offlineCacheCalculateUsage();
+                });
+                return;
+            }
+
+            const layer = layers[index];
+            const layername = layer.options.name;
+
+            const xyzs = layer.calculateXYZListFromPyramid(lat, lon, zmin, zmax);
+
+            const complete_callback = (done, total) => {
+                const text = `Done with ${layername}`;
+                this.$scope.$apply(() => { // no idea why this is necessary when usually plain assignment works
+                    this.offlinecache.busy = text;
+                });
+                console.log(text);
+                seedLayerByIndex(index + 1);
+            };
+            const progress_callback = (done, total) => {
+                const percent = Math.round( 100 * parseFloat(done + 1) / parseFloat(total) );
+                const text = `${layername} ${percent}%, ${done + 1} / ${total}`;
+                this.$scope.$apply(() => { // no idea why this is necessary when usually plain assignment works
+                    this.offlinecache.busy = text;
+                });
+                console.log(text);
+            };
+            const error_callback = () => {
+                this.modalMessageShow('Could not download map tiles. Please try again.');
+            };
+
+            const overwrite = false;
+            layer.downloadXYZList(xyzs, overwrite, progress_callback, complete_callback, error_callback);
+        };
+        seedLayerByIndex(0);
+    }
+
+    offlineCachePurge () {
+        const layers = Object.values(this.map.basemaps);
+
+        const finished_callback = () => {
+            this.offlinecache.busy = "";
+            this.offlineCacheCalculateUsage();
+        };
+
+        const handleLayerByIndex = (index) => {
+            // if we are done with the last, then we're done
+            if (index >= layers.length) {
+                finished_callback();
+                return;
+            }
+
+            const tilelayer = layers[index];
+            const layername = tilelayer.options.name;
+            console.log([ 'offlineCachePurge', 'try' ]);
+            this.offlinecache.busy = `Emptying ${layername}`;
+
+            tilelayer.emptyCache( () => {
+                // on to the next one
+                handleLayerByIndex(index + 1);
+            });
+        };
+        handleLayerByIndex(0);
+    }
+
+    offlineCacheCalculateUsage () {
+        var filecount = 0;
+        var filesize = 0;
+
+        const layers = Object.values(this.map.basemaps);
+
+        const finished_callback = () => {
+            this.$scope.$apply(() => { // no idea why this is necessary instead of plain assignment...
+                this.offlinecache.filecount = filecount;
+                this.offlinecache.filesize = filesize;
+            });
+        };
+
+        const handleLayerByIndex = (index) => {
+            // if we are done with the last, then we're done
+            if (index >= layers.length) {
+                finished_callback();
+                return;
+            }
+
+            const tilelayer = layers[index];
+            const layername = tilelayer.options.name;
+            console.log([ 'offlineCacheCalculateUsage', 'try', layername ]);
+
+            tilelayer.getDiskUsage( (thisfilecount, thisfilesize) => {
+                console.log([ 'getDiskUsage', 'got', layername, thisfilecount, thisfilesize ]);
+                filecount += thisfilecount;
+                filesize += thisfilesize;
+
+                // on to the next one
+                handleLayerByIndex(index + 1);
+            });
+        };
+        handleLayerByIndex(0);
     }
 }
 

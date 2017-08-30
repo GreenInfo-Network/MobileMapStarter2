@@ -33,7 +33,7 @@ export const SETTINGS = {
                 // the folder where tiles are stored on device, and the "basename" of the stored tile files
                 folder: 'MobileMapStarter',
                 name: 'osm',
-                debug: true,
+                debug: false,
                 // plus the usual L.TileLayer options such as attributions and minZoom/maxZoom
             }
         },
@@ -43,7 +43,7 @@ export const SETTINGS = {
                 // the folder where tiles are stored on device, and the "basename" of the stored tile files
                 folder: 'MobileMapStarter',
                 name: 'esritopo',
-                debug: true,
+                debug: false,
                 // plus the usual L.TileLayer options such as attributions and minZoom/maxZoom
             }
         },
@@ -53,9 +53,16 @@ export const SETTINGS = {
                 // the folder where tiles are stored on device, and the "basename" of the stored tile files
                 folder: 'MobileMapStarter',
                 name: 'esriimagery',
-                debug: true,
+                debug: false,
                 // plus the usual L.TileLayer options such as attributions and minZoom/maxZoom
             }
         },
     },
+
+    // offline tile caching
+    // how deep should we cache tiles for offline use?
+    // you may want this to be the same as maxZoom, but be careful that deeper = more tiles = longer waits = higher tile traffic
+    // you may want the whole world from level 0 to 18, but is it really a good idea?
+    offlineCacheMinZoom: 10,
+    offlineCacheMaxZoom: 16,
 };

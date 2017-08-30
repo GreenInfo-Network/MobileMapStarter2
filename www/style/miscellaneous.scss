@@ -3,6 +3,20 @@
  * applicable to the whole app, not specific panels
  */
 
+/*
+ * UTILITY CLASSES
+ */
+
+.center {
+    text-align: center;
+}
+
+input[type="text"][readonly] {
+    color: black;
+    font-weight: bold;
+}
+
+
 /* Bootstrap doesn't have this combination built in: a btn-group with btn-block, a 100%-width button group */
 .btn-group-vertical.btn-group-block {
     width: 100%;

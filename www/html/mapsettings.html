@@ -1,5 +1,6 @@
 <div class="scrollable">
     <div class="scrollable-content">
+
         <div class="section" style="text-align: center;">
             <h2>Base Map</h2>
             <div class="btn-group-vertical btn-group-block" role="group">
@@ -18,7 +19,28 @@
                 <toggle ng-model="app.mapFollowMyLocation" ng-change="app.selectPage('map');" on="Yes" off="No" onstyle="btn-primary" offstyle="btn-default" size="btn-sm"></toggle>
                 <!-- Toggle is actually a pretty Bootstrap .btn  http://ziscloud.github.io/angular-bootstrap-toggle/ -->
             </div>
-
         </div>
+
+        <br/>
+
+        <div class="section" style="text-align: center;">
+            <h2>Offline Maps</h2>
+            <div class="btn-group-vertical btn-group-block" role="group" ng-show="app.offlinecache.busy">
+                <input type="text" class="form-control center" value="{{ app.offlinecache.busy }}" readonly />
+            </div>
+            <div class="btn-group-vertical btn-group-block" role="group" ng-hide="app.offlinecache.busy">
+                <a class="btn btn-primary" ng-click="app.offlineCacheLoadCurrentView();"><i class="fa fa-cloud-download"></i> Download Current Map View</a>
+
+                <br/>
+
+                <input type="text" class="form-control center" value="{{ app.offlinecache.filecount|number }} files" readonly />
+                <input type="text" class="form-control center" value="{{ (app.offlinecache.filesize / 1048576)|number:1 }} MB" readonly />
+
+                <br/>
+
+                <a class="btn btn-danger" ng-click="app.offlineCachePurge();"><i class="fa fa-trash"></i> Delete Offline Content</a>
+            </div>
+        </div>
+
     </div>
 </div>
