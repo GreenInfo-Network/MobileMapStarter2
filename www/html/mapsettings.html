@@ -25,20 +25,26 @@
 
         <div class="section" style="text-align: center;">
             <h2>Offline Maps</h2>
-            <div class="btn-group-vertical btn-group-block" role="group" ng-show="app.offlinecache.busy">
-                <input type="text" class="form-control center" value="{{ app.offlinecache.busy }}" readonly />
+            <div class="btn-group-block" role="group" ng-hide="app.offlinecache.busy">
+                <a class="btn btn-primary btn-block" ng-show="! app.offlinecache.online" ng-click="app.offlineCacheGoOnline();"><i class="fa fa-podcast"></i> Offline; Go Online</a>
+                <a class="btn btn-primary btn-block" ng-show="app.offlinecache.online" ng-click="app.offlineCacheGoOffline();"><i class="fa fa-power-off"></i> Online; Go Offline</a>
+                <br/>
+            </div>
+            <div class="btn-group-block" role="group" ng-show="app.offlinecache.busy">
+                {{ app.offlinecache.busy }}
+                <br/>
+                <a class="btn btn-primary btn-block" ng-click="app.offlineCacheCancelDownloads();">Cancel</a>
+                <br/>
+            </div>
+            <div class="btn-group-block" role="group" ng-hide="app.offlinecache.busy">
+                <input type="text" class="form-control center" value="{{ app.offlinecache.filecount|number }} files" readonly />
+                <input type="text" class="form-control center" value="{{ (app.offlinecache.filesize / 1048576)|number:1 }} MB" readonly />
+                <br/>
             </div>
             <div class="btn-group-vertical btn-group-block" role="group" ng-hide="app.offlinecache.busy">
                 <a class="btn btn-primary" ng-click="app.offlineCacheLoadCurrentView();"><i class="fa fa-cloud-download"></i> Download Current Map View</a>
-
-                <br/>
-
-                <input type="text" class="form-control center" value="{{ app.offlinecache.filecount|number }} files" readonly />
-                <input type="text" class="form-control center" value="{{ (app.offlinecache.filesize / 1048576)|number:1 }} MB" readonly />
-
-                <br/>
-
                 <a class="btn btn-danger" ng-click="app.offlineCachePurge();"><i class="fa fa-trash"></i> Delete Offline Content</a>
+                <br/>
             </div>
         </div>
 

@@ -38,6 +38,7 @@ export class APP_CONTROLLER {
             filecount: 0,
             filesize: 0.0,
             busy: '',
+            online: true,
         };
 
         // start the map when the element becomes ready; the L.Map is available as this.map
@@ -227,7 +228,10 @@ export class APP_CONTROLLER {
 
             const xyzs = layer.calculateXYZListFromPyramid(lat, lon, zmin, zmax);
 
+            this.offlinecache.busy = `Starting ${layername}`; // so we are officially "busy"
+
             const complete_callback = (done, total) => {
+                // report our progress, then on to the next one
                 const text = `Done with ${layername}`;
                 this.$scope.$apply(() => { // no idea why this is necessary when usually plain assignment works
                     this.offlinecache.busy = text;
@@ -236,6 +240,13 @@ export class APP_CONTROLLER {
                 seedLayerByIndex(index + 1);
             };
             const progress_callback = (done, total) => {
+                // if our busy message ahs been cleared, it means we should cancel; do this by returning false from our progress callback
+                if (! this.offlinecache.busy) {
+                    console.log('offlineCacheLoadCurrentView cancel received');
+                    return false;
+                }
+
+                // generate a simple status/progress message
                 const percent = Math.round( 100 * parseFloat(done + 1) / parseFloat(total) );
                 const text = `${layername} ${percent}%, ${done + 1} / ${total}`;
                 this.$scope.$apply(() => { // no idea why this is necessary when usually plain assignment works
@@ -251,6 +262,11 @@ export class APP_CONTROLLER {
             layer.downloadXYZList(xyzs, overwrite, progress_callback, complete_callback, error_callback);
         };
         seedLayerByIndex(0);
+    }
+
+    offlineCacheCancelDownloads () {
+        // offlineCacheLoadCurrentView() checks for this having been blanked out, takes that to mean cancel
+        this.offlinecache.busy = "";
     }
 
     offlineCachePurge () {
@@ -315,6 +331,14 @@ export class APP_CONTROLLER {
             });
         };
         handleLayerByIndex(0);
+    }
+
+    offlineCacheGoOnline () {
+        this.offlinecache.online = true;
+    }
+
+    offlineCacheGoOffline () {
+        this.offlinecache.online = true;
     }
 }
 
