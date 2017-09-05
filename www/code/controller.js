@@ -334,11 +334,21 @@ export class APP_CONTROLLER {
     }
 
     offlineCacheGoOnline () {
+        Object.values(this.map.basemaps).forEach((tilelayer) => {
+            console.log([ 'offlineCacheGoOnline', tilelayer.options.name ]);
+            tilelayer.goOnline();
+        });
+
         this.offlinecache.online = true;
     }
 
     offlineCacheGoOffline () {
-        this.offlinecache.online = true;
+        Object.values(this.map.basemaps).forEach((tilelayer) => {
+            console.log([ 'offlineCacheGoOffline', tilelayer.options.name ]);
+            tilelayer.goOffline();
+        });
+
+        this.offlinecache.online = false;
     }
 }
 
