@@ -8,6 +8,8 @@ A starting framework for mobile maps using Cordova/Phonegap. A minimal but funct
 * L.TileLayer.Cordova for offline tile caching
 * Simple in-code documentation for customization, including pitfalls and gotchas
 
+You may also be interested in https://github.com/gregallensworth/MobileMapStarter and https://github.com/GreenInfo-Network/IonicMapStarter as starting places for your mobile app. We do not actively maintain them anymore, but they still work.
+
 
 ## SETUP
 
