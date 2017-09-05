@@ -1,3 +1,14 @@
+## MOBILE MAP STARTER 2
+
+A starting framework for mobile maps using Cordova/Phonegap. A minimal but functional, standalone mobile app from which to build your own creations.
+
+* A combination of AngularJS and Bootstrap forming a basic framework
+* Page-turning behavior
+* Working Leaflet map with various bug workarounds
+* L.TileLayer.Cordova for offline tile caching
+* Simple in-code documentation for customization, including pitfalls and gotchas
+
+
 ## SETUP
 
 You will want to run `yarn install` in this folder, to install the pieces for webpack to compile your ES2015 and SASS code.
