@@ -25,24 +25,24 @@ export const SETTINGS = {
     //
     // see also mapsettings.html for the UI where one selects the basemap, as you will want to tailor that to this listing and to your use case
     // (it won't be auto-generated from this list, as we don't know your specific UI use case)
-    startingBasemap: 'esritopo',
+    startingBasemap: 'opentopo',
     basemaps: {
-        'osm': {
-            url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        'opentopo': {
+            url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
             options: {
                 // the folder where tiles are stored on device, and the "basename" of the stored tile files
                 folder: 'MobileMapStarter',
-                name: 'osm',
+                name: 'opentopo',
                 debug: false,
                 // plus the usual L.TileLayer options such as attributions and minZoom/maxZoom
             }
         },
-        'esritopo': {
+        'esriroad': {
             url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
             options: {
                 // the folder where tiles are stored on device, and the "basename" of the stored tile files
                 folder: 'MobileMapStarter',
-                name: 'esritopo',
+                name: 'esriroad',
                 debug: false,
                 // plus the usual L.TileLayer options such as attributions and minZoom/maxZoom
             }
