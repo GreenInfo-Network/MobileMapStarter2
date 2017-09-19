@@ -86,8 +86,13 @@ export class APP_CONTROLLER {
         // create L.TileLayer.Cordova instances for the defined basemap options then select one
         this.map.basemaps = {};
         Object.entries(this.SETTINGS.basemaps).forEach( ([ layername, layeroptions ]) => {
-            if (! layeroptions.options.folder || !layeroptions.options.name) throw "Basemaps definitions: L.TileLayer.Cordova requires folder and name";
-            this.map.basemaps[layername] = L.tileLayerCordova(layeroptions.url, layeroptions.options);
+            if (layeroptions.offlineCache === true) {
+                if (! layeroptions.options.folder || !layeroptions.options.name) throw "Basemaps definitions: L.TileLayer.Cordova requires folder and name";
+                this.map.basemaps[layername] = L.tileLayerCordova(layeroptions.url, layeroptions.options);
+            }
+            else {
+                this.map.basemaps[layername] = L.tileLayer(layeroptions.url, layeroptions.options);
+            }
         });
         this.selectBasemap(this.SETTINGS.startingBasemap);
 
@@ -192,11 +197,23 @@ export class APP_CONTROLLER {
         this.globalmodal = undefined;
     }
 
-    // loading the map cache from the current map view
-    // and emptying the cache
+    // L.TileLayer.Cordova cache management
+    // loading the map cache from the current map view and emptying the cache, calculating usage, etc.
+    offlineCacheListAllLayers () {
+        //  list of all basemaps which are L>TileLayer.Cordova
+        return Object.values(this.map.basemaps).filter( (layer) => { return layer instanceof L.TileLayer.Cordova; });
+    }
+
     offlineCacheLoadCurrentView () {
         // if they're already too far in, then bail
         console.log([ 'offlineCacheLoadCurrentView entry', this.map.getZoom(), this.SETTINGS.offlineCacheMaxZoom, this.SETTINGS.offlineCacheMinZoom ]);
+
+        const layers = this.offlineCacheListAllLayers();
+        if (! layers.length) {
+            this.modalMessageShow('No layers have offlineCache enabled.', 'No Layers Found');
+            return;
+        }
+
         if (this.map.getZoom() > this.SETTINGS.offlineCacheMaxZoom) {
             this.modalMessageShow('You are zoomed in beyond the level allowed for offline map tiles. Zoom out and try again.', 'Zoom Out');
             return;
@@ -210,7 +227,6 @@ export class APP_CONTROLLER {
         const lat = this.map.getCenter().lat;
         const zmin = this.map.getZoom();
         const zmax = this.SETTINGS.offlineCacheMaxZoom;
-        const layers = Object.values(this.map.basemaps);
         console.log([ 'offlineCacheLoadCurrentView params', lon, lat, zmin, zmax ]);
 
         const seedLayerByIndex = (index) => {
@@ -270,7 +286,11 @@ export class APP_CONTROLLER {
     }
 
     offlineCachePurge () {
-        const layers = Object.values(this.map.basemaps);
+        const layers = this.offlineCacheListAllLayers();
+        if (! layers.length) {
+            this.modalMessageShow('No layers have offlineCache enabled.', 'No Layers Found');
+            return;
+        }
 
         const finished_callback = () => {
             this.offlinecache.busy = "";
@@ -298,10 +318,14 @@ export class APP_CONTROLLER {
     }
 
     offlineCacheCalculateUsage () {
+        const layers = this.offlineCacheListAllLayers();
+        if (! layers.length) {
+            this.modalMessageShow('No layers have offlineCache enabled.', 'No Layers Found');
+            return;
+        }
+
         var filecount = 0;
         var filesize = 0;
-
-        const layers = Object.values(this.map.basemaps);
 
         const finished_callback = () => {
             this.$scope.$apply(() => { // no idea why this is necessary instead of plain assignment...
@@ -334,7 +358,13 @@ export class APP_CONTROLLER {
     }
 
     offlineCacheGoOnline () {
-        Object.values(this.map.basemaps).forEach((tilelayer) => {
+        const layers = this.offlineCacheListAllLayers();
+        if (! layers.length) {
+            this.modalMessageShow('No layers have offlineCache enabled.', 'No Layers Found');
+            return;
+        }
+
+        layers.forEach((tilelayer) => {
             console.log([ 'offlineCacheGoOnline', tilelayer.options.name ]);
             tilelayer.goOnline();
         });
@@ -343,7 +373,13 @@ export class APP_CONTROLLER {
     }
 
     offlineCacheGoOffline () {
-        Object.values(this.map.basemaps).forEach((tilelayer) => {
+        const layers = this.offlineCacheListAllLayers();
+        if (! layers.length) {
+            this.modalMessageShow('No layers have offlineCache enabled.', 'No Layers Found');
+            return;
+        }
+
+        layers.forEach((tilelayer) => {
             console.log([ 'offlineCacheGoOffline', tilelayer.options.name ]);
             tilelayer.goOffline();
         });

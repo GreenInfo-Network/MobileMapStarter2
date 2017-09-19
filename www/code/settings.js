@@ -20,14 +20,18 @@ export const SETTINGS = {
     mapFollowZoomLevel: 14,
 
     // for the map, the list of basemap options and which basemap is shown at startup
-    // the 'url' and 'options' will be passed to L.TileLayer.Cordova, which accepts the usual URL and tileLayer options plus some extras for caching
-    // read more https://github.com/gregallensworth/L.TileLayer.Cordova/
+    // these will be used to create L.TileLayer and L.TileLayer.Cordova instances to form the basemaps
+    // if offlineCache is true, then L.TileLayer.Cordova will be used; otherwise L.TileLayer will be used
+    // the 'url' will be passed as the URL templatem and 'options' will be passed as the second param for tile layer configuration as usual
+    //
+    // for more info https://github.com/gregallensworth/L.TileLayer.Cordova/
     //
     // see also mapsettings.html for the UI where one selects the basemap, as you will want to tailor that to this listing and to your use case
-    // (it won't be auto-generated from this list, as we don't know your specific UI use case)
+    // (the UI will not be auto-generated from this list, as we don't know your specific UI use case and that may not be what you want at all)
     startingBasemap: 'opentopo',
     basemaps: {
         'opentopo': {
+            offlineCache: true,
             url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
             options: {
                 // the folder where tiles are stored on device, and the "basename" of the stored tile files
@@ -38,6 +42,7 @@ export const SETTINGS = {
             }
         },
         'esriroad': {
+            offlineCache: true,
             url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
             options: {
                 // the folder where tiles are stored on device, and the "basename" of the stored tile files
@@ -48,6 +53,7 @@ export const SETTINGS = {
             }
         },
         'esriimagery': {
+            offlineCache: true,
             url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
             options: {
                 // the folder where tiles are stored on device, and the "basename" of the stored tile files
