@@ -23,7 +23,7 @@ module.exports = {
             {
                 test: /\.js$/,
                 use: [
-                    { loader: 'babel-loader', options: { presets: ['es2015'] } },
+                    { loader: 'babel-loader', options: { presets: ['env'] } },
                     { loader: 'jshint-loader', options: { esversion: 6, emitErrors: true, failOnHint: true } }
                 ],
                 exclude: /node_modules/

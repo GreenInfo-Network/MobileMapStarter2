@@ -18,3 +18,4 @@ www/bundle.js.map
 
 # these happen if npm crashes and are not useful to keep in version control
 npm-debug.log
+yarn-error.log
