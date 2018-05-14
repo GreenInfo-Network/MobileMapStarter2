@@ -13,7 +13,7 @@ You may also be interested in https://github.com/gregallensworth/MobileMapStarte
 
 ## SETUP
 
-You will want to run `yarn install` in this folder, to install the pieces for webpack to compile your ES2015 and SASS code.
+You will want to run `yarn install` in this folder, to install the pieces for webpack to compile your ES2017 and SASS code.
 
 You will also want to run `yarn install` in the `www/` folder, to install the components used by the web app.
 
@@ -37,7 +37,7 @@ You will also want to edit `config.xml` and `package.json` to reflect you app's 
 
 ## DEVELOPMENT OVERVIEW AND CONVENTIONS
 
-This app uses webpack to compile ES2015 code into JavaScript, and to compile SASS into CSS. The output files are *bundle.css* and *bundle.js* but you should instead make your changes to the `index.*` entry points. See the Quick Start for an overview of the files.
+This app uses webpack to compile ES2017 code into JavaScript (via Babel `env` preset), and to compile SASS into CSS (via sass-loader and node-sass). The output files are *bundle.css* and *bundle.js* but you should instead make your changes to the `index.*` entry points. See the Quick Start for an overview of the files.
 
 The basic HTML/JS framework is *mobile-angular-ui* This is basically AngularJS and an optimzied build of Bootstrap 3. Read more: http://mobileangularui.com/docs/
 
