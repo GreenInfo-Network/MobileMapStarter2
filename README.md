@@ -11,17 +11,34 @@ A starting framework for mobile maps using Cordova/Phonegap. A minimal but funct
 You may also be interested in https://github.com/gregallensworth/MobileMapStarter and https://github.com/GreenInfo-Network/IonicMapStarter as starting places for your mobile app. We do not actively maintain them anymore, but they still work.
 
 
-## SETUP
 
-You will want to run `yarn install` in this folder, to install the pieces for webpack to compile your ES2017 and SASS code.
+## QUICK START
 
-You will also want to run `yarn install` in the `www/` folder, to install the components used by the web app.
+Clone the repository, then delete its .git to detach it from MMS2:
+```
+git clone https://github.com/GreenInfo-Network/MobileMapStarter2.git MyShinyNewApp
+cd MyShinyNewApp
+rm -rf .git
+```
 
-If you are setting up this project, run `cordova prepare` to fetch plugins and platforms.
+Install NPM packages, for this Cordova container and also for your own `www/` content:
+```
+yarn -i
+( cd www/ ; yarn -i )
+```
 
-If you are setting up this project, you will also need to install ImageMagick via apt, brew, or binary download.
+Build the WWW content that is your app. This will also run `cordova prepare` for you to collect the generated files into the app:
+```
+npm run build
+```
 
-Recommended settings for iOS, done via Xcode.
+Build the icons and splash screens:
+```
+npm run icon
+npm run splash
+```
+
+If you will be building for iOS, use Xcode to make some settings changes:
 * Open the project file in Xcode.
 * In its General tab:
   * Device Orientation = check all 4
@@ -31,7 +48,9 @@ Recommended settings for iOS, done via Xcode.
   * Status bar is initially hidden = YES
   * View controller-based status bar appearance = NO
 
-You will also want to edit `config.xml` and `package.json` to reflect you app's name, author, etc.
+Now start customizing to make it your app:
+* Edit `config.xml` and `package.json` to reflect you app's name, author, etc.
+* And start reorganizing the `www/` content to make your own app.
 
 
 
@@ -45,14 +64,13 @@ Page-changing is done via mobile-angular-ui's *SharedState* service. See the `wh
 
 Icon and splash screen are generated from *splash.png* and *icon.png*  See their repositories' documentation for more info: [cordova-splash](https://github.com/AlexDisler/cordova-splash) and [cordva-icon](https://github.com/AlexDisler/cordova-icon)
 
-
-## DEVELOPMENT QUICK START
-
 The essential commands:
 * `npm run build` -- Compile the SASS and JS files.
 * `npm run watch` -- Compile the SASS and JS files, then watch them for changes and recompile as needed.
 * `npm run icon` -- Generate a new set of app icons from *icon.png*
 * `npm run splash` -- Generate a new set of app splash screens from *splash.png*
+
+The `yarn.lock` specfies Cordova as a development dependency, meaning that multiple apps would effectively get their own installation of Cordova under their `node_modules/` folder. As such, it is advised that you use the `npm run` commands described, or take care to run `The `yarn.lock` specfies Cordova as a development dependency, meaning that multiple apps would effectively get their own installation of Cordova under their `node_modules/` folder. As such, it is advised that you run `The `yarn.lock` specfies Cordova as a development dependency, meaning that multiple apps would effectively get their own installation of Cordova under their `node_modules/` folder. As such, it is advised that you either write new npm scripts in `package.json` or else specifically use `./node_modules/.bin/cordova` to ensure that you are using the correct version of Cordova for this app.
 
 An overview of the files:
 * `www/index.js` -- The entry point for webpack
@@ -79,10 +97,9 @@ An overview of the files:
 
 The app directory has a *yarn.lock* file for installing packages related to webpack and compiling JS/SASS. The `www/` folder has a separate `yarn.lock` file, for dependencies used in the web app. Keeping them separate makes for easier maintainability of the www components versus the build system, should you have your own preferred build system. For your use case, perhaps merging and then require()'ing the libs makes sense.
 
-After making changes to the HTML/CSS/JS files, the apps won't be rebuilt by Cordova (and thus visible to Xcode et al) until you issue a `cordova prepare` If you're using the provided webpack config, there is already a shell command which will run this for you.
+After making changes to the HTML/CSS/JS files, the apps won't be rebuilt by Cordova (and thus visible to Xcode and Android Studio) until you issue a `cordova prepare` If you're using `npm run build` then it will already run a `cordova prepare` for you.
 
-The page-changing system using *SharedState* was not my first choice, but ngRoute and ui.router both provided unsuitable. Ultimately, I used a combination of `ui-show` and `ng-include` behaviors to create a similar effect, but without the problems. 
+The page-changing system using *SharedState* was not my first choice, but ngRoute and ui.router both provided unsuitable. Ultimately, I used a combination of `ui-show` and `ng-include` behaviors to create a similar effect, but without the problems.
   * They lazy-load partial views so elements are not in the DOM at startup. For code which expects to attach behaviors such as Leaflet, this is unhealthy.
   * The partial view content is unloaded from the DOM when it leaves visibility. This means map tiles, map state, etc. are effectively lost. While a workaround could be to destroy and reinitialize the whole map every time you visit it... no.
-  
 
